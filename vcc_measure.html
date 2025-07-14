@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Vcc using RL78/I1C Internal Vref</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #004080;
+        }
+        pre {
+            background-color: #eaeaea;
+            padding: 10px;
+            border-left: 4px solid #004080;
+            overflow-x: auto;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🧠 Calculating Vcc Using RL78/I1C MCU’s Internal Vref and ADC</h1>
+
+<p>Many embedded applications require monitoring the supply voltage (Vcc) without external components. The RL78/I1C microcontroller from Renesas makes this possible using its internal ADC and built-in reference voltage (Vref).</p>
+
+<h2>🔍 Why Monitor Vcc?</h2>
+<ul>
+    <li>Battery level estimation in low-power devices.</li>
+    <li>Adaptive power-saving modes.</li>
+    <li>Safe operation near brown-out thresholds.</li>
+</ul>
+
+<h2>🧪 Key Features of RL78/I1C</h2>
+<ul>
+    <li>10-bit ADC</li>
+    <li>Fixed internal reference voltage (Vref = 1.45V)</li>
+    <li>Built-in temperature sensor and internal Vref channel</li>
+    <li>Low-power STOP and HALT modes</li>
+</ul>
+
+<h2>📐 Basic ADC Voltage Formula</h2>
+<pre><code>Vin = (ADC_value / 1024) × Vcc</code></pre>
+
+<p>But here, <strong>we want to calculate Vcc</strong>, not the input voltage.</p>
+
+<h2>🧮 Vcc Calculation Using Internal Vref Channel</h2>
+<p>When you select the internal Vref (1.45V) as the ADC input source, and still use Vcc as the ADC reference, the ADC reads a value corresponding to 1.45V.</p>
+
+<p>Rearranging the ADC formula:</p>
+<pre><code>Vref = (ADC_value / 1024) × Vcc
+=> Vcc = (Vref × 1024) / ADC_value</code></pre>
+
+<h3>✅ Final Formula:</h3>
+<pre><code>Vcc = (1.45 × 1024) / ADC_value</code></pre>
+
+<h2>📌 Example</h2>
+<p>If ADC reading = 820</p>
+<pre><code>Vcc = (1.45 × 1024) / 820 ≈ 1.81V</code></pre>
+
+<h2>🧾 Sample C Code Snippet</h2>
+<pre><code>uint16_t adc_val = read_adc_internal_vref(); // Read Vref channel
+float vcc = (1.45 * 1024.0) / adc_val;</code></pre>
+
+<h2>⚙️ Configuration Steps (IAR / CS+ / e2studio)</h2>
+<ol>
+    <li>Enable ADC peripheral.</li>
+    <li>Select internal reference voltage channel.</li>
+    <li>Start ADC conversion and wait for completion.</li>
+    <li>Use formula to calculate Vcc.</li>
+</ol>
+
+<h2>✅ Benefits of This Method</h2>
+<ul>
+    <li>No external components</li>
+    <li>Efficient for battery-powered systems</li>
+    <li>Enables software-based brown-out protection</li>
+    <li>Useful in health monitoring</li>
+</ul>
+
+<h2>📦 Related Applications</h2>
+<ul>
+    <li>Smart gas or water meters</li>
+    <li>Battery-powered IoT sensors</li>
+    <li>Energy-efficient MCU designs</li>
+    <li>Prepaid metering logic</li>
+</ul>
+
+<h2>🧑‍💻 Author</h2>
+<p>Published by <strong>Your Name</strong> — Visit <a href="https://yourwebsite.com">yourwebsite.com</a></p>
+
+</body>
+</html>
